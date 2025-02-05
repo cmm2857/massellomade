@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>massellomade</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>massello made. - Art, Photography, 3D Sculptures & Designs</title>
+  
+  <!-- Global Styles -->
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    /* Header */
+    header {
+      background: #fff;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li {
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    nav ul li:hover {
+      color: #0077cc;
+    }
+    
+    /* Hero Section with 3D Scene */
+    .hero {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      margin-top: 60px; /* Space for fixed header */
+    }
+    .scene-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #webgl {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    
+    /* Content Sections */
+    .content {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .content h2 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      text-align: center;
+    }
+    .content p {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+    }
+    
+    /* Shop Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .grid-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .grid-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .grid-item img {
+      width: 100%;
+      display: block;
+    }
+    .grid-item .info {
+      padding: 15px;
+    }
+    .grid-item .info h3 {
+      margin-bottom: 5px;
+      font-size: 1.2em;
+    }
+    .grid-item .info p {
+      font-size: 0.9em;
+      color: #777;
+    }
+    
+    /* Contact Form */
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    form button {
+      padding: 10px 20px;
+      border: none;
+      background: #0077cc;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+    form button:hover {
+      background: #005fa3;
+    }
+    
+    /* Footer */
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    /* Modal Styles */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    #modal > .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+    }
+    #modal .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    #modal img {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 20px;
+      }
+      nav ul {
+        padding: 10px 0;
+      }
+    }
+  </style>
+  
+  <!-- Import map for Three.js -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="logo">massello made.</div>
+    <nav>
+      <ul>
+        <li onclick="scrollToSection('hero')">Home</li>
+        <li onclick="scrollToSection('about')">About</li>
+        <li onclick="scrollToSection('shop')">Shop</li>
+        <li onclick="scrollToSection('contact')">Contact</li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Hero Section with 3D WebGL Scene (Crystal Only) -->
+  <section class="hero" id="hero">
+    <div class="scene-container">
+      <canvas id="webgl"></canvas>
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section class="content" id="about">
+    <h2>About Us</h2>
+    <p>
+      Welcome to massello made. We offer a unique collection of art, photography, 3D printed sculptures, and innovative designs. Our passion for creativity and quality means every piece is crafted to inspire.
+    </p>
+  </section>
+  
+  <!-- Shop Section -->
+  <section class="content" id="shop">
+    <h2>Our Creations</h2>
+    <div class="grid">
+      <!-- Example grid items -->
+      <div class="grid-item" onclick="openModal('item1')">
+        <img src="https://via.placeholder.com/400x300.png?text=Art+Piece+1" alt="Art Piece 1" />
+        <div class="info">
+          <h3>Art Piece 1</h3>
+          <p>Acrylic on canvas</p>
+        </div>
+      </div>
+      <div class="grid-item" onclick="openModal('item2')">
+        <img src="https://via.placeholder.com/400x300.png?text=Photography+1" alt="Photography 1" />
+        <div class="info">
+          <h3>Photography 1</h3>
+          <p>Captured moments</p>
+        </div>
+      </div>
+      <div class="grid-item" onclick="openModal('item3')">
+        <img src="https://via.placeholder.com/400x300.png?text=3D+Sculpture+1" alt="3D Sculpture 1" />
+        <div class="info">
+          <h3>3D Sculpture 1</h3>
+          <p>3D printed masterpiece</p>
+        </div>
+      </div>
+      <div class="grid-item" onclick="openModal('item4')">
+        <img src="https://via.placeholder.com/400x300.png?text=Design+1" alt="Design 1" />
+        <div class="info">
+          <h3>Design 1</h3>
+          <p>Modern design work</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section class="content" id="contact">
+    <h2>Contact Us</h2>
+    <p>Have questions or need custom designs? Reach out to us!</p>
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 massello made. All rights reserved.</p>
+  </footer>
+  
+  <!-- Modal for Product Details -->
+  <div id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  
+  <!-- Smooth Scroll and Modal Scripts -->
+  <script>
+    // Smooth scroll for navigation links
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        window.scrollTo({
+          top: section.offsetTop - 60,
+          behavior: 'smooth'
+        });
+      }
+    }
+    
+    // Modal functions for product details
+    function openModal(itemId) {
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modalContent');
+      if (itemId === 'item1') {
+        modalContent.innerHTML = '<h2>Art Piece 1</h2><p>Detailed description of Art Piece 1.</p><img src="https://via.placeholder.com/500x400.png?text=Art+Piece+1" alt="Art Piece 1">';
+      } else if (itemId === 'item2') {
+        modalContent.innerHTML = '<h2>Photography 1</h2><p>Detailed description of Photography 1.</p><img src="https://via.placeholder.com/500x400.png?text=Photography+1" alt="Photography 1">';
+      } else if (itemId === 'item3') {
+        modalContent.innerHTML = '<h2>3D Sculpture 1</h2><p>Detailed description of 3D Sculpture 1.</p><img src="https://via.placeholder.com/500x400.png?text=3D+Sculpture+1" alt="3D Sculpture 1">';
+      } else if (itemId === 'item4') {
+        modalContent.innerHTML = '<h2>Design 1</h2><p>Detailed description of Design 1.</p><img src="https://via.placeholder.com/500x400.png?text=Design+1" alt="Design 1">';
+      } else {
+        modalContent.innerHTML = '<p>No details available.</p>';
+      }
+      modal.style.display = 'flex';
+    }
+    
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById('modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+    
+    // Contact form demo
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      this.reset();
+    });
+  </script>
+  
+  <!-- 3D WebGL Scene Script with Crystal Shape and Animated Background -->
+  <script type="module">
+    import * as THREE from 'three';
+    
+    // Set up Scene, Camera, and Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75, 
+      window.innerWidth / window.innerHeight, 
+      0.1, 
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas: document.querySelector('#webgl'),
+      antialias: true 
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 3;
+    
+    // Define shader for the crystal (icosahedron) shape
+    const sphereShader = {
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        uniform float uTime;
+        void main() {
+          vUv = uv;
+          vNormal = normal;
+          vec3 pos = position;
+          pos += normal * sin(position.y * 10.0 + uTime) * 0.1;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        varying vec3 vNormal;
+        uniform float uTime;
+        void main() {
+          float pattern = sin(vUv.y * 20.0 + uTime) * 0.5 + 0.5;
+          float gray = mix(0.2, 0.8, pattern);
+          float fresnel = pow(1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+          gray += fresnel * 0.08;
+          gl_FragColor = vec4(vec3(gray), 1.0);
+        }
+      `
+    };
+    
+    // Create the crystal material using the monochrome shader
+    const sphereMaterial = new THREE.ShaderMaterial({
+      vertexShader: sphereShader.vertexShader,
+      fragmentShader: sphereShader.fragmentShader,
+      uniforms: {
+        uTime: { value: 0 }
+      }
+    });
+    
+    // Create an icosahedron geometry for the crystal shape
+    const sphereGeometry = new THREE.IcosahedronGeometry(1.2, 32);
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    scene.add(sphere);
+    
+    // Prepare colors for animated background: black to white
+    const black = new THREE.Color(0x000000);
+    const white = new THREE.Color(0xffffff);
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = performance.now() * 0.001;
+      
+      // Update shader time uniform
+      sphereMaterial.uniforms.uTime.value = time;
+      
+      // Rotate the crystal shape continuously
+      sphere.rotation.x = time * 0.3;
+      sphere.rotation.y = time * 0.5;
+      
+      // Animate background color fading between black and white over a 35-second cycle
+      const tFactor = 0.5 * (1 + Math.sin((2 * Math.PI * time) / 35));
+      scene.background = black.clone().lerp(white, tFactor);
+      
+      renderer.render(scene, camera);
+    }
+    
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    animate();
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
